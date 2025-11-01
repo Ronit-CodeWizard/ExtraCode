@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Is That A Sign From God? by Ronit Kumar Majhi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .book-wrapper {
+            background: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        
+        @media (min-width: 1025px) {
+            body {
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                min-height: auto;
+            }
+            
+            .book-wrapper {
+                border-radius: 20px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                min-height: auto;
+            }
+        }
+
+        /* Cover Page */
+        .cover-page {
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #2d1b47 0%, #4a2a5e 50%, #6b3d7a 100%);
+            background-image: url('https://i.supaimg.com/623a8510-3f36-4252-826a-79fca67f89d2.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cover-page::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 0;
+        }
+
+        .cover-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.08) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        .cover-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .book-title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            line-height: 1.2;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            font-family: 'Palatino', serif;
+        }
+
+        .author-name {
+            font-size: 24px;
+            margin-top: 40px;
+            font-style: italic;
+            opacity: 0.9;
+        }
+
+        .tagline {
+            font-size: 20px;
+            font-style: italic;
+            margin-top: 50px;
+            opacity: 0.85;
+            max-width: 90%;
+            padding: 0 20px;
+        }
+
+        .category-tags {
+            margin-top: 60px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            padding: 0 20px;
+        }
+
+        .tag {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            backdrop-filter: blur(10px);
+        }
+
+        .start-reading-btn {
+            margin-top: 60px;
+            padding: 16px 40px;
+            font-size: 20px;
+            background: white;
+            color: #4a2a5e;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .start-reading-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .start-reading-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Story Page */
+        .story-page {
+            display: none;
+            width: 100%;
+        }
+
+        .story-page.active {
+            display: block;
+        }
+
+        .header-image {
+            width: 100%;
+            min-height: 400px;
+            background: linear-gradient(90deg, #3a1c5d 0%, #5a2d7a 50%, #3a1c5d 100%);
+            background-image: url('https://i.supaimg.com/da82ff61-82a1-4671-b822-8d604ecdeb33.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px;
+            color: white;
+            font-weight: bold;
+            text-shadow: 3px 3px 15px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+            padding: 40px 20px;
+        }
+        
+        .header-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 0;
+        }
+
+        .header-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 40%, rgba(255,255,255,0.15) 0%, transparent 40%),
+                radial-gradient(circle at 70% 60%, rgba(255,255,255,0.1) 0%, transparent 40%);
+            z-index: 1;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .story-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            line-height: 1.8;
+            font-size: 17px;
+            color: #333;
+        }
+
+        .story-content p {
+            margin-bottom: 24px;
+            text-align: justify;
+            text-indent: 40px;
+        }
+
+        .story-content p:first-of-type::first-letter {
+            font-size: 60px;
+            font-weight: bold;
+            float: left;
+            line-height: 48px;
+            padding-right: 8px;
+            color: #4a2a5e;
+        }
+
+        .quote {
+            font-style: italic;
+            text-align: center;
+            font-size: 18px;
+            margin: 40px 20px;
+            color: #4a2a5e;
+            padding: 20px;
+            background: rgba(106, 61, 122, 0.05);
+            border-left: 4px solid #4a2a5e;
+        }
+
+        .story-end {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 60px;
+            margin-bottom: 40px;
+            color: #4a2a5e;
+            font-style: italic;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 12px 24px;
+            background: #4a2a5e;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: transform 0.3s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .back-btn:active {
+            transform: translateY(0);
+        }
+
+        @media (min-width: 768px) {
+            .book-title {
+                font-size: 64px;
+                margin-bottom: 40px;
+            }
+
+            .author-name {
+                font-size: 32px;
+                margin-top: 50px;
+            }
+
+            .tagline {
+                font-size: 24px;
+                margin-top: 70px;
+            }
+
+            .category-tags {
+                margin-top: 80px;
+                gap: 15px;
+            }
+
+            .tag {
+                padding: 10px 20px;
+                font-size: 15px;
+            }
+
+            .start-reading-btn {
+                margin-top: 70px;
+                padding: 18px 45px;
+                font-size: 22px;
+            }
+
+            .header-image {
+                min-height: 500px;
+                font-size: 42px;
+            }
+
+            .story-content {
+                padding: 60px 40px;
+                font-size: 18px;
+                line-height: 1.9;
+            }
+
+            .story-content p {
+                margin-bottom: 28px;
+                text-indent: 45px;
+            }
+
+            .story-content p:first-of-type::first-letter {
+                font-size: 70px;
+                line-height: 54px;
+            }
+
+            .quote {
+                font-size: 20px;
+                margin: 50px 30px;
+                padding: 25px;
+            }
+
+            .story-end {
+                font-size: 28px;
+                margin-top: 70px;
+            }
+
+            .back-btn {
+                top: 25px;
+                left: 25px;
+                padding: 14px 28px;
+                font-size: 17px;
+            }
+        }
+
+        @media (min-width: 1025px) {
+            .cover-page {
+                padding: 60px;
+            }
+
+            .book-title {
+                font-size: 72px;
+            }
+
+            .author-name {
+                font-size: 36px;
+                margin-top: 60px;
+            }
+
+            .tagline {
+                font-size: 28px;
+                margin-top: 80px;
+                max-width: 700px;
+            }
+
+            .category-tags {
+                margin-top: 100px;
+            }
+
+            .start-reading-btn {
+                margin-top: 80px;
+                padding: 20px 50px;
+                font-size: 24px;
+            }
+
+            .header-image {
+                height: 600px;
+                font-size: 52px;
+            }
+
+            .story-content {
+                padding: 80px 60px;
+                font-size: 20px;
+                line-height: 2;
+            }
+
+            .story-content p {
+                margin-bottom: 30px;
+                text-indent: 50px;
+            }
+
+            .story-content p:first-of-type::first-letter {
+                font-size: 80px;
+                line-height: 60px;
+                padding-right: 10px;
+            }
+
+            .quote {
+                font-size: 24px;
+                margin: 60px 0;
+                padding: 30px;
+                border-left: 5px solid #4a2a5e;
+            }
+
+            .story-end {
+                font-size: 32px;
+                margin-top: 80px;
+            }
+
+            .back-btn {
+                top: 30px;
+                left: 30px;
+                padding: 15px 30px;
+                font-size: 18px;
+            }
+        }
+
+        @media (min-width: 1440px) {
+            .header-image {
+                height: 800px;
+                font-size: 64px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="book-wrapper">
+            <!-- Cover Page -->
+            <div class="cover-page" id="coverPage">
+                <div class="cover-content">
+                    <h1 class="book-title">Is That A Sign<br>From God?</h1>
+                    
+                    <p class="tagline">Sometimes, love doesn't end - it just pauses forever.</p>
+                    
+                    <p class="author-name">by Ronit Kumar Majhi</p>
+                    
+                    <div class="category-tags">
+                        <span class="tag">Romance</span>
+                        <span class="tag">Young Adult</span>
+                        <span class="tag">Coming of Age</span>
+                        <span class="tag">Drama</span>
+                        <span class="tag">Emotional</span>
+                        <span class="tag">Life Lessons</span>
+                        <span class="tag">Slice of Life</span>
+                    </div>
+                    
+                    <button class="start-reading-btn" onclick="startReading()">Start Reading</button>
+                </div>
+            </div>
+
+            <!-- Story Page -->
+            <div class="story-page" id="storyPage">
+                <button class="back-btn" onclick="backToCover()">← Back to Cover</button>
+                
+                <div class="header-image">
+                    <div class="header-content">
+                        <div>Is That A Sign From God?</div>
+                        <div style="font-size: 0.5em; margin-top: 20px; opacity: 0.9;">A Story of Faith, Love, and Destiny</div>
+                    </div>
+                </div>
+                
+                <div class="story-content">
+                    <p>The morning began just like any other—quiet, slow, and painfully ordinary. I dragged myself through my routine, brushing, dressing, and packing for school with little excitement. It was only my third day at this new school, and everything still felt strange and unfamiliar.</p>
+
+                    <p>I waited at the bus stand, yawning and half-awake, while the morning breeze carried the faint sound of birds and chatter around Narwapahar. When the bus arrived, I climbed in, found a seat, and sat in silence. My elbow rested on my knee, chin on my palm, eyes wandering out the window as the familiar roads rolled past. The scenery outside blurred into greens and browns, and boredom hung heavy on me.</p>
+
+                    <p>When the bus finally stopped at Jadugoda, I stayed seated for a moment, still lost in thought. That's when I saw her—walking down the road toward the school gate, smiling brightly as she chatted with her friend. For a second, everything around me froze. The noise faded, the bus engine quieted, and all I could see was that smile. I didn't even know her name, yet something inside me shifted.</p>
+
+                    <p>Later, as I entered the classroom, my heart skipped a beat. She was there—in my section. That single coincidence felt like fate itself. Trying to shake off the excitement, I greeted some new faces and soon became friends with Shiv, Rohan, Gopal, and Prakash. Prakash was from Jadugoda, and the rest were from Turamdih—each with their own stories, their own laughter.</p>
+
+                    <p>By the sixth period, we had our library class. Curiosity got the better of me, so I asked Rohan who that girl was. He grinned and said, "Her name's Tanisha Singh. She's from Turamdih." Just hearing her name felt like unlocking a secret.</p>
+
+                    <p>That evening, I asked Rohan for her Instagram handle. Her account was private, so I sent a follow request and waited. When she accepted—and even followed me back—I was stunned. She didn't even know my name, and yet somehow, our paths had quietly crossed again.</p>
+
+                    <p>The next morning, I told Rohan about it, grinning ear to ear. That's how it all began. To start a conversation, I messaged her asking for the chemistry notes from class. She replied kindly, and from there, our chats grew little by little. I found myself trying to keep her attention, drawing her closer with every message.</p>
+
+                    <p>At school, rules kept us from talking freely, but her benchmate, Angel Roshni—the girls' monitor—knew about us. Funny enough, Rohan was the boys' monitor, and I was the Biology Lab Vice-Captain. Somehow, fate had placed all the right people around me to keep this secret alive.</p>
+
+                    <p>Days passed, and everything felt perfect… until whispers began spreading. A classmate, Dasmat, mentioned my name, then Chaitan, then Debashish—until the whole bus seemed to know I liked her. Everyone's sudden curiosity turned her attention away from me. Soon after, I heard she had started talking to another boy—a poetry lover. That burned inside me. I stopped talking to her completely.</p>
+
+                    <p>Later, I discovered that the boy wasn't even writing his own poems; he was copying someone else's lines. Somehow, that made it worse and funnier at the same time. I tried to move on, but when I learned that she'd stopped talking to him too, my heart betrayed me again. I began speaking to her once more.</p>
+
+                    <p>One day, during Raksha Bandhan, I got a message from her that simply said, "Hey." For a second, I panicked—what if she wanted to make me her brother? Still, I replied, trying to stay calm. She asked how I was; I said I was fine and asked about her. She said she was fine too and asked about my Raksha Bandhan plans. I told her I don't really celebrate it because of some family issues. And honestly, I silently thanked God that day—she didn't call me brother or say anything related to tying a rakhi. That small moment felt like a blessing, one I'd never forget.</p>
+
+                    <p>But fate wasn't done with its twists. Tanisha soon started talking to a senior named Amay—and this time, it became serious. They were together. It shattered me completely. I distanced myself from everything, focusing only on my studies as we reached the final exams of class 11.</p>
+
+                    <p>Months later, I heard they had broken up. A strange hope returned to me. I began talking to her again, noticing small hints that she still cared, though neither of us ever said it aloud.</p>
+
+                    <p>When class 12 began, our batch had only fifteen students left—just three boys: me, Dasmat, and Chaitan. We called ourselves the "Three Pillars of the Class." After the retests, Shiv and Rohan rejoined, and life started feeling normal again.</p>
+
+                    <p>I knew she wasn't mine, and maybe never would be. So I tried to let go. I stopped messaging her, and she didn't reach out either.</p>
+
+                    <p>Then one day, while I was watching my friends play basketball, they teased me, saying, "If you make this shot, Tanisha will be all yours." I laughed—but when I threw the ball, it swished cleanly through the hoop. My first-ever basket. Everyone shouted, and for a moment, I wondered—was that a sign from God?</p>
+
+                    <p>Later, as exams approached, I wasn't studying much. Instead, I made a deal with myself: I'll study until she texts me. The moment I started the timer, my phone buzzed. A message—"Hey." From Tanisha.</p>
+
+                    <p>I just sat there, stunned, smiling to myself. Maybe, just maybe, it really was a sign.</p>
+
+                    <div class="quote">
+                        "God is still writing your story. Quit trying to steal the pen. Trust the author."
+                    </div>
+
+                    <p>Maybe God was writing mine too.</p>
+
+                    <p>Even though I made mistakes—ignoring her, pretending not to care, breaking my own heart—the story didn't end there. Every silence, every message, every accidental glance… all of it was still part of something bigger.</p>
+
+                    <div class="story-end">And so—<br>the journey continues.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function startReading() {
+            document.getElementById('coverPage').style.display = 'none';
+            document.getElementById('storyPage').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function backToCover() {
+    document.getElementById('coverPage').style.display = 'flex';
+    document.getElementById('storyPage').classList.remove('active');
+    window.scrollTo(0, 0);
+}
+
+// Smooth scroll behavior
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+        });
+    });
+});
+
+// Prevent zooming on iOS double tap
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function (event) {
+    const now = (new Date()).getTime();
+    if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+    }
+    lastTouchEnd = now;
+}, false);
+
+// Add fade-in animation when page loads
+window.addEventListener('load', function() {
+    document.querySelector('.cover-page').style.opacity = '0';
+    setTimeout(function() {
+        document.querySelector('.cover-page').style.transition = 'opacity 1s ease-in';
+        document.querySelector('.cover-page').style.opacity = '1';
+    }, 100);
+});
+
+// Add reading progress indicator
+let progressBar = document.createElement('div');
+progressBar.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+    width: 0%;
+    z-index: 9999;
+    transition: width 0.2s ease;
+`;
+document.body.appendChild(progressBar);
+
+window.addEventListener('scroll', function() {
+    if (document.getElementById('storyPage').classList.contains('active')) {
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight - windowHeight;
+        const scrolled = window.scrollY;
+        const progress = (scrolled / documentHeight) * 100;
+        progressBar.style.width = progress + '%';
+    } else {
+        progressBar.style.width = '0%';
+    }
+});
+
+// Save reading position
+window.addEventListener('scroll', function() {
+    if (document.getElementById('storyPage').classList.contains('active')) {
+        localStorage.setItem('readingPosition', window.scrollY);
+    }
+});
+
+// Restore reading position
+function restoreReadingPosition() {
+    const savedPosition = localStorage.getItem('readingPosition');
+    if (savedPosition && document.getElementById('storyPage').classList.contains('active')) {
+        setTimeout(function() {
+            window.scrollTo(0, parseInt(savedPosition));
+        }, 100);
+    }
+}
+
+// Call restore when starting to read
+const originalStartReading = startReading;
+startReading = function() {
+    originalStartReading();
+    restoreReadingPosition();
+};
+
+</script>
+
+  </body>
+</html>
+         
