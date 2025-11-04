@@ -450,6 +450,137 @@
                 font-size: 64px;
             }
         }
+
+/* Password Lock Interface */
+.password-lock {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #FACC15 0%, #EAB308 100%);
+    z-index: 10000;
+    justify-content: center;
+    align-items: center;
+}
+
+.password-lock.active {
+    display: flex;
+}
+
+.lock-container {
+    background: white;
+    border-radius: 20px;
+    padding: 50px 40px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.lock-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+.lock-title {
+    font-size: 28px;
+    color: #4a2a5e;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.lock-subtitle {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.pin-input-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.pin-input {
+    width: 50px;
+    height: 60px;
+    font-size: 32px;
+    text-align: center;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.3s;
+    font-weight: bold;
+    color: #4a2a5e;
+}
+
+.pin-input:focus {
+    border-color: #FACC15;
+    box-shadow: 0 0 10px rgba(250, 204, 21, 0.3);
+}
+
+.unlock-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    background: linear-gradient(135deg, #FACC15 0%, #EAB308 100%);
+    color: #333;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin-top: 10px;
+}
+
+.unlock-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(250, 204, 21, 0.4);
+}
+
+.unlock-btn:active {
+    transform: translateY(0);
+}
+
+.error-message {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: 15px;
+    min-height: 20px;
+    font-weight: 500;
+}
+
+.back-to-cover {
+    margin-top: 20px;
+    color: #666;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.back-to-cover:hover {
+    color: #4a2a5e;
+}
+
+@media (max-width: 480px) {
+    .lock-container {
+        padding: 40px 30px;
+    }
+
+    .pin-input {
+        width: 45px;
+        height: 55px;
+        font-size: 28px;
+    }
+
+    .pin-input-container {
+        gap: 10px;
+    }
+}
     </style>
 </head>
 <body>
@@ -567,6 +698,28 @@ That was my mistake again — one of those small, stupid replies that carry big 
         </div>
     </div>
 
+<!-- Password Lock Interface -->
+<div class="password-lock" id="passwordLock">
+    <div class="lock-container">
+        <div class="lock-icon">🔒</div>
+        <h2 class="lock-title">Enter PIN</h2>
+        <p class="lock-subtitle">Please enter the 4-digit PIN to unlock the story</p>
+        
+        <div class="pin-input-container">
+            <input type="password" maxlength="1" class="pin-input" id="pin1" />
+            <input type="password" maxlength="1" class="pin-input" id="pin2" />
+            <input type="password" maxlength="1" class="pin-input" id="pin3" />
+            <input type="password" maxlength="1" class="pin-input" id="pin4" />
+        </div>
+        
+        <button class="unlock-btn" onclick="verifyPin()">Unlock</button>
+        
+        <div class="error-message" id="errorMessage"></div>
+        
+        <a class="back-to-cover" onclick="hidePasswordLock()">← Back to Cover</a>
+    </div>
+</div>
+
     <script>
         function startReading() {
             document.getElementById('coverPage').style.display = 'none';
@@ -659,6 +812,82 @@ startReading = function() {
     restoreReadingPosition();
 };
 
+// Set your PIN here (4 digits)
+const CORRECT_PIN = "1234"; // Change this to your desired PIN
+
+function showPasswordLock() {
+    document.getElementById('passwordLock').classList.add('active');
+    document.getElementById('pin1').focus();
+}
+
+function hidePasswordLock() {
+    document.getElementById('passwordLock').classList.remove('active');
+    clearPinInputs();
+    document.getElementById('errorMessage').textContent = '';
+}
+
+function clearPinInputs() {
+    document.getElementById('pin1').value = '';
+    document.getElementById('pin2').value = '';
+    document.getElementById('pin3').value = '';
+    document.getElementById('pin4').value = '';
+}
+
+function verifyPin() {
+    const pin1 = document.getElementById('pin1').value;
+    const pin2 = document.getElementById('pin2').value;
+    const pin3 = document.getElementById('pin3').value;
+    const pin4 = document.getElementById('pin4').value;
+    const enteredPin = pin1 + pin2 + pin3 + pin4;
+
+    if (enteredPin.length !== 4) {
+        document.getElementById('errorMessage').textContent = 'Please enter all 4 digits';
+        return;
+    }
+
+    if (enteredPin === CORRECT_PIN) {
+        document.getElementById('errorMessage').textContent = '';
+        document.getElementById('passwordLock').classList.remove('active');
+        startReading();
+        clearPinInputs();
+    } else {
+        document.getElementById('errorMessage').textContent = 'Incorrect PIN. Please try again.';
+        clearPinInputs();
+        document.getElementById('pin1').focus();
+    }
+}
+
+// Auto-focus next input
+document.getElementById('pin1').addEventListener('input', function() {
+    if (this.value.length === 1) document.getElementById('pin2').focus();
+});
+document.getElementById('pin2').addEventListener('input', function() {
+    if (this.value.length === 1) document.getElementById('pin3').focus();
+});
+document.getElementById('pin3').addEventListener('input', function() {
+    if (this.value.length === 1) document.getElementById('pin4').focus();
+});
+document.getElementById('pin4').addEventListener('input', function() {
+    if (this.value.length === 1) verifyPin();
+});
+
+// Handle backspace
+document.getElementById('pin2').addEventListener('keydown', function(e) {
+    if (e.key === 'Backspace' && this.value === '') document.getElementById('pin1').focus();
+});
+document.getElementById('pin3').addEventListener('keydown', function(e) {
+    if (e.key === 'Backspace' && this.value === '') document.getElementById('pin2').focus();
+});
+document.getElementById('pin4').addEventListener('keydown', function(e) {
+    if (e.key === 'Backspace' && this.value === '') document.getElementById('pin3').focus();
+});
+
+// Allow Enter key to verify
+document.querySelectorAll('.pin-input').forEach(input => {
+    input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') verifyPin();
+    });
+});
 </script>
 
   </body>
