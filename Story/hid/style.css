@@ -574,3 +574,124 @@
         gap: 10px;
     }
 }
+
+.highlight-moment {
+    background: linear-gradient(to right, rgba(250, 204, 21, 0.1), rgba(234, 179, 8, 0.1));
+    border-left: 4px solid #FACC15;
+    padding: 20px 25px;
+    margin: 30px 0;
+    font-size: 19px;
+    line-height: 1.8;
+    font-style: italic;
+    color: #333;
+}
+
+.dialogue-highlight {
+    background: rgba(74, 42, 94, 0.05);
+    border-left: 4px solid #4a2a5e;
+    padding: 20px 25px;
+    margin: 30px 0;
+    font-size: 19px;
+    line-height: 1.8;
+    color: #4a2a5e;
+    font-weight: 500;
+}
+
+.reflection-box {
+    text-align: center;
+    font-style: italic;
+    font-size: 20px;
+    margin: 40px auto;
+    padding: 25px;
+    max-width: 600px;
+    color: #4a2a5e;
+    line-height: 1.8;
+    border-top: 2px solid #FACC15;
+    border-bottom: 2px solid #FACC15;
+}
+
+.turning-point {
+    background: linear-gradient(135deg, rgba(250, 204, 21, 0.15), rgba(234, 179, 8, 0.15));
+    padding: 20px 25px;
+    margin: 30px 0;
+    font-size: 19px;
+    line-height: 1.8;
+    text-align: center;
+    font-weight: 500;
+    color: #333;
+    border-radius: 10px;
+}
+
+.closing-reflection {
+    font-style: italic;
+    text-align: center;
+    font-size: 19px;
+    margin: 40px 20px;
+    padding: 25px;
+    color: #4a2a5e;
+    line-height: 1.9;
+    background: rgba(250, 204, 21, 0.08);
+    border-radius: 10px;
+}
+
+.inner-thought {
+    font-style: italic;
+    color: #4a2a5e;
+    font-size: 20px;
+    margin: 25px 0;
+    padding: 15px 20px;
+    border-left: 3px solid #FACC15;
+    background: rgba(250, 204, 21, 0.05);
+}
+
+.realization {
+    text-align: center;
+    font-size: 18px;
+    margin: 20px 0;
+    padding: 15px;
+    color: #666;
+    font-style: italic;
+    letter-spacing: 1px;
+}
+
+.inner-conflict {
+    background: linear-gradient(to right, rgba(74, 42, 94, 0.08), rgba(250, 204, 21, 0.08));
+    padding: 20px 25px;
+    margin: 30px 0;
+    font-size: 19px;
+    line-height: 1.8;
+    color: #4a2a5e;
+    border-radius: 10px;
+    font-style: italic;
+}
+
+.emphasis-text {
+    color: #4a2a5e;
+    font-style: italic;
+    font-weight: 500;
+}
+
+@media (min-width: 768px) {
+    .highlight-moment,
+    .dialogue-highlight,
+    .turning-point,
+    .inner-conflict {
+        font-size: 20px;
+        padding: 25px 30px;
+    }
+    
+    .reflection-box,
+    .closing-reflection {
+        font-size: 22px;
+        padding: 30px;
+    }
+    
+    .inner-thought {
+        font-size: 21px;
+        padding: 18px 25px;
+    }
+    
+    .realization {
+        font-size: 19px;
+    }
+}
