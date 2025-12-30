@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Travelling - CodeWizard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            height: 100%;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #fff;
+            position: relative;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            padding: 0 15px;
+            margin: auto 0;
+        }
+
+        .icon {
+            font-size: 64px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .icon svg {
+            filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.3));
+            width: 64px;
+            height: 64px;
+        }
+
+        h1 {
+            font-size: 20px;
+            font-weight: 300;
+            letter-spacing: 6px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            opacity: 0.4;
+            letter-spacing: 2px;
+            margin-bottom: 60px;
+            text-transform: uppercase;
+        }
+
+        .date-input-group {
+            margin: 50px 0;
+            position: relative;
+        }
+
+        input[type="date"] {
+            width: 100%;
+            max-width: 100%;
+            padding: 24px 30px;
+            font-size: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            color: #fff;
+            font-family: inherit;
+            transition: all 0.4s ease;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        input[type="date"]::-webkit-date-and-time-value {
+            text-align: center;
+        }
+
+        input[type="date"]:hover {
+            border-color: rgba(99, 102, 241, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        input[type="date"]:focus {
+            outline: none;
+            border-color: rgba(99, 102, 241, 0.6);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1),
+                        0 8px 24px rgba(99, 102, 241, 0.15);
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            opacity: 0.4;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator:hover {
+            opacity: 0.8;
+        }
+
+        .success-message {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            font-size: 14px;
+            opacity: 0.7;
+            letter-spacing: 1px;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 8px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .success-message svg {
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 0.7;
+                transform: translateY(0);
+            }
+        }
+
+        .error-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: modalFade 0.3s ease;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        @keyframes modalFade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .error-content {
+            max-width: 450px;
+            width: 100%;
+            padding: 60px 50px;
+            text-align: center;
+            background: rgba(220, 38, 38, 0.05);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: 16px;
+            backdrop-filter: blur(20px);
+            animation: slideUp 0.4s ease;
+            margin: auto;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .error-icon {
+            font-size: 72px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .error-icon svg {
+            filter: drop-shadow(0 0 20px rgba(220, 38, 38, 0.3));
+            width: 72px;
+            height: 72px;
+        }
+
+        .error-message {
+            font-size: 26px;
+            font-weight: 300;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .error-subtitle {
+            font-size: 12px;
+            opacity: 0.5;
+            margin-bottom: 50px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        .close-btn {
+            background: transparent;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 16px 45px;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border-radius: 8px;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .close-btn:active {
+            transform: translateY(0);
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 11px;
+            letter-spacing: 2px;
+            opacity: 0.3;
+            text-transform: uppercase;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .footer a {
+            pointer-events: auto;
+        }
+
+        .footer:hover {
+            opacity: 0.7;
+        }
+
+        .footer a {
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .footer a:hover {
+            border-bottom-color: rgba(99, 102, 241, 0.6);
+            color: rgba(99, 102, 241, 0.8);
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+                padding-bottom: 70px;
+            }
+
+            .container {
+                padding: 0 10px;
+            }
+
+            .icon {
+                font-size: 48px;
+                margin-bottom: 20px;
+            }
+
+            .icon svg {
+                width: 48px;
+                height: 48px;
+            }
+
+            h1 {
+                font-size: 16px;
+                letter-spacing: 3px;
+                margin-bottom: 8px;
+            }
+
+            .subtitle {
+                font-size: 10px;
+                margin-bottom: 40px;
+            }
+
+            input[type="date"] {
+                padding: 18px 20px;
+                font-size: 14px;
+            }
+
+            .success-message {
+                padding: 15px;
+                font-size: 12px;
+                margin-top: 25px;
+            }
+
+            .error-content {
+                padding: 40px 30px;
+            }
+
+            .error-icon {
+                font-size: 56px;
+                margin-bottom: 20px;
+            }
+
+            .error-icon svg {
+                width: 56px;
+                height: 56px;
+            }
+
+            .error-message {
+                font-size: 20px;
+                margin-bottom: 12px;
+            }
+
+            .error-subtitle {
+                font-size: 10px;
+                margin-bottom: 35px;
+            }
+
+            .close-btn {
+                padding: 14px 35px;
+                font-size: 11px;
+            }
+
+            .footer {
+                font-size: 9px;
+                bottom: 12px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            h1 {
+                font-size: 14px;
+                letter-spacing: 2px;
+            }
+
+            .subtitle {
+                font-size: 9px;
+            }
+
+            input[type="date"] {
+                padding: 16px 18px;
+                font-size: 13px;
+            }
+
+            .error-message {
+                font-size: 18px;
+            }
+
+            .error-content {
+                padding: 35px 25px;
+            }
+        }
+
+        @media (min-width: 481px) and (max-width: 768px) {
+            .container {
+                max-width: 500px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .container {
+                max-width: 550px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+
+        @media (min-width: 1025px) {
+            .container {
+                max-width: 600px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            input[type="date"] {
+                padding: 26px 32px;
+                font-size: 17px;
+            }
+        }
+
+        @media (max-height: 600px) and (orientation: landscape) {
+            body {
+                padding: 10px;
+                padding-bottom: 60px;
+            }
+
+            .icon {
+                font-size: 40px;
+                margin-bottom: 15px;
+            }
+
+            .icon svg {
+                width: 40px;
+                height: 40px;
+            }
+
+            h1 {
+                font-size: 16px;
+                margin-bottom: 5px;
+            }
+
+            .subtitle {
+                font-size: 11px;
+                margin-bottom: 25px;
+            }
+
+            .date-input-group {
+                margin: 30px 0;
+            }
+
+            .error-content {
+                padding: 30px 40px;
+            }
+
+            .error-icon {
+                font-size: 48px;
+                margin-bottom: 15px;
+            }
+
+            .error-icon svg {
+                width: 48px;
+                height: 48px;
+            }
+
+            .error-message {
+                font-size: 20px;
+                margin-bottom: 10px;
+            }
+
+            .error-subtitle {
+                margin-bottom: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+            </svg>
+        </div>
+        <h1>Time Traveller</h1>
+        <p class="subtitle">Select Your Destination</p>
+        
+        <div class="date-input-group">
+            <input type="date" id="dateInput" min="">
+        </div>
+
+        <div class="success-message" id="successMsg"></div>
+    </div>
+
+    <div class="error-modal" id="errorModal">
+        <div class="error-content">
+            <div class="error-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="15" y1="9" x2="9" y2="15"/>
+                    <line x1="9" y1="9" x2="15" y2="15"/>
+                </svg>
+            </div>
+            <div class="error-message">2026 mein toh duniya khatam hai</div>
+            <div class="error-subtitle">Access Denied</div>
+            <button class="close-btn" onclick="closeModal()">Return</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        Created by <a href="#" target="_blank">CodeWizard</a>
+    </div>
+
+    <script>
+        const dateInput = document.getElementById('dateInput');
+        const errorModal = document.getElementById('errorModal');
+        const successMsg = document.getElementById('successMsg');
+
+        // Set minimum date to December 31, 2025
+        const minDate = new Date('2025-12-31');
+        const minDateString = minDate.toISOString().split('T')[0];
+        dateInput.setAttribute('min', minDateString);
+
+        let dangerAudio = null;
+
+        function playDangerMusic() {
+            stopDangerMusic();
+            
+            dangerAudio = new Audio('duniya khatam h.mp3');
+            dangerAudio.loop = false;
+            dangerAudio.volume = 0.5;
+            dangerAudio.play().catch(err => {
+                console.log('Audio play failed:', err);
+            });
+        }
+
+        function stopDangerMusic() {
+            if (dangerAudio) {
+                dangerAudio.pause();
+                dangerAudio.currentTime = 0;
+                dangerAudio = null;
+            }
+        }
+
+        function playErrorSound() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            
+            osc.frequency.value = 200;
+            osc.type = 'sine';
+            
+            gain.gain.setValueAtTime(0.2, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+            
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + 0.2);
+        }
+
+        function playSuccessSound() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            
+            osc.frequency.value = 800;
+            osc.type = 'sine';
+            
+            gain.gain.setValueAtTime(0.1, audioContext.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+            
+            osc.start(audioContext.currentTime);
+            osc.stop(audioContext.currentTime + 0.3);
+        }
+
+        dateInput.addEventListener('change', function() {
+            const selectedDate = new Date(this.value);
+            const year = selectedDate.getFullYear();
+            
+            successMsg.style.display = 'none';
+            
+            if (year >= 2026) {
+                playErrorSound();
+                setTimeout(() => {
+                    playDangerMusic();
+                }, 200);
+                errorModal.style.display = 'flex';
+            } else {
+                playSuccessSound();
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                const formattedDate = selectedDate.toLocaleDateString('en-US', options);
+                successMsg.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    ${formattedDate}
+                `;
+                successMsg.style.display = 'block';
+            }
+        });
+
+        function closeModal() {
+            stopDangerMusic();
+            errorModal.style.display = 'none';
+            dateInput.value = '';
+        }
+
+        errorModal.addEventListener('click', function(e) {
+            if (e.target === errorModal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
